@@ -1,0 +1,36 @@
+{
+  "Proposed Method: Learned Multi-Signal Detector": {
+    "accuracy": 0.74,
+    "precision": 0.7727,
+    "recall": 0.68,
+    "f1_score": 0.7234,
+    "macro_f1": 0.7391,
+    "roc_auc": 0.7312,
+    "true_positives": 102,
+    "true_negatives": 120,
+    "false_positives": 30,
+    "false_negatives": 48,
+    "false_positive_rate": 0.2,
+    "false_negative_rate": 0.32,
+    "total_samples": 300,
+    "total_latency_seconds": 0.0061,
+    "latency_per_sample_ms": 0.02
+  },
+  "Proposed Method: Configurable Weighted Score (Heuristic)": {
+    "accuracy": 0.48,
+    "precision": 0.4826,
+    "recall": 0.5533,
+    "f1_score": 0.5155,
+    "macro_f1": 0.4772,
+    "roc_auc": 0.5464,
+    "true_positives": 83,
+    "true_negatives": 61,
+    "false_positives": 89,
+    "false_negatives": 67,
+    "false_positive_rate": 0.5933,
+    "false_negative_rate": 0.4467,
+    "total_samples": 300,
+    "total_latency_seconds": 0.01,
+    "latency_per_sample_ms": 0.03
+  }
+}

@@ -1,0 +1,19 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches and checkpoints
+.cache/
+.ipynb_checkpoints/
+*.pt
+*.bin
+
+# Data and large model checkpoints (keep small artifacts)
+data/raw/
+models/*.safetensors
+*.log
+
+# OS generated
+.DS_Store
+Thumbs.db

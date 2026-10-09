@@ -1,0 +1,7 @@
+feature,coefficient,weight,description,direction
+entity_unsupported_risk,5.219468648730949,5.219468648730949,Unsupported named entities penalty (novel entities in answer),Hallucinating (+)
+contradiction_risk,1.5435918347685194,1.5435918347685194,Factual contradiction penalty (NLI premise-hypothesis conflict),Hallucinating (+)
+sentence_unsupported_risk,0.2,0.2,Ungrounded sentence ratio penalty (claim-level verification),Hallucinating (+)
+non_entailment_risk,0.2,0.2,Non-entailment penalty (1 - P(entailment)),Hallucinating (+)
+semantic_distance_risk,0.2,0.2,Semantic divergence penalty (1 - MiniLM cosine similarity),Hallucinating (+)
+lexical_distance_risk,0.2,0.2,Lexical divergence penalty (1 - TF-IDF cosine similarity),Hallucinating (+)

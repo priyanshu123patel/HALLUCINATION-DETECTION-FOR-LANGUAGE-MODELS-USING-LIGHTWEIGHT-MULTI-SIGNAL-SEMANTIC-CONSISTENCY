@@ -1,0 +1,91 @@
+# ==============================================================================
+# HALLUCINATION DETECTION FOR LANGUAGE MODELS - EXPERIMENTAL CONFIGURATION
+# ==============================================================================
+
+project:
+  name: "Hallucination Detection for Language Models"
+  version: "1.0.0"
+  random_seed: 42
+  description: "Lightweight multi-signal framework for detecting LM hallucinations without fine-tuning"
+
+# Hardware and Execution Settings
+device:
+  auto_detect: true         # Automatically check CUDA, fallback to CPU
+  fallback: "cpu"
+  torch_num_threads: 4
+
+# Dataset Settings
+dataset:
+  name: "pminervini/HaluEval"
+  subset: "qa_samples"       # 'qa_samples' (10,000 samples) or 'qa'
+  split: "data"
+  text_field_context: "knowledge"
+  text_field_query: "question"
+  text_field_answer: "answer"
+  label_field: "hallucination"
+  label_mapping:
+    "yes": 1                 # 1 = HALLUCINATED
+    "no": 0                  # 0 = SUPPORTED
+  sample_sizes:
+    train: 1500              # Train sample count (balanced 50/50)
+    val: 300                 # Validation sample count
+    test: 300                # Test sample count
+  stratify: true
+  save_raw: true
+  save_processed: true
+
+# Pretrained Lightweight Models (strictly resource-conscious: <= 8GB RAM, <= 4GB VRAM)
+models:
+  semantic_model: "sentence-transformers/all-MiniLM-L6-v2"  # ~80MB, 384-dim embeddings
+  nli_model: "cross-encoder/nli-deberta-v3-xsmall"         # ~120MB, Cross-Encoder NLI (contr/entail/neutral)
+  spacy_model: "en_core_web_sm"                            # ~12MB, Fast NER tagger
+  batch_size: 32                                           # Batch size for model inference
+  max_length: 256                                          # Max token length for context/answer
+
+# Feature Extraction Groups
+features:
+  lexical:
+    enabled: true
+    tfidf_max_features: 5000
+    ngram_range: [1, 2]
+  semantic:
+    enabled: true
+    metric: "cosine"
+  nli:
+    enabled: true
+    labels: ["contradiction", "entailment", "neutral"]
+  entity:
+    enabled: true
+    case_sensitive: false
+    filter_entity_types: ["PERSON", "ORG", "GPE", "LOC", "DATE", "CARDINAL", "NORP"]
+  sentence_level:
+    enabled: true
+    suspicious_contradiction_threshold: 0.50
+    suspicious_semantic_threshold: 0.40
+
+# Interpretable Heuristic Weighted Score (Formula-based alternative to Learned Model)
+weighted_scoring:
+  contradiction_weight: 0.35
+  semantic_similarity_weight: -0.25   # Lower similarity increases hallucination probability
+  entailment_weight: -0.20           # Lower entailment increases hallucination probability
+  entity_unsupported_weight: 0.20
+  unsupported_sentence_weight: 0.15
+  threshold: 0.50
+
+# Classifier Settings
+classifier:
+  type: "logistic_regression"        # Primary interpretable model
+  max_iter: 1000
+  class_weight: "balanced"
+  solver: "lbfgs"
+  C: 1.0
+
+# Paths
+paths:
+  raw_data_dir: "data/raw"
+  processed_data_dir: "data/processed"
+  models_dir: "models"
+  figures_dir: "results/figures"
+  metrics_dir: "results/metrics"
+  predictions_dir: "results/predictions"
+  error_analysis_file: "results/predictions/error_analysis.csv"
